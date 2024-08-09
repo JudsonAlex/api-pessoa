@@ -41,7 +41,7 @@ def inserirPessoa():
     cursor.close()
     conn.close()
     print(resultado[0])
-    return jsonify(resultado[0])
+    return jsonify({"idPessoa":resultado[0]})
 
 
 @bp_pessoa.route('/', methods=["GET"])
@@ -72,20 +72,24 @@ def listarTodos():
 def listarUM(id):
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute(f'select * from listarum({id})')
-    resultado = cursor.fetchone()
-    obj ={
-                'idPessoa': resultado[0],
-                'nome': resultado[1],
-                'datanascimento': resultado[2],
-                'salario': resultado[3],
-                'observacoes': resultado[4],
-                'nomemae': resultado[5],
-                'nomepai': resultado[6],
-                'cpf': resultado[7]
-            }
-    print(obj)
-    return jsonify(obj)
+    try:
+        cursor.execute(f'select * from listarum({id})')
+        resultado = cursor.fetchone()
+        obj ={
+                    'idPessoa': resultado[0],
+                    'nome': resultado[1],
+                    'datanascimento': resultado[2],
+                    'salario': resultado[3],
+                    'observacoes': resultado[4],
+                    'nomemae': resultado[5],
+                    'nomepai': resultado[6],
+                    'cpf': resultado[7]
+                }
+        print(obj)
+        return jsonify(obj)
+    except psycopg2.errors.RaiseException as e:
+        print(e)
+        return jsonify({"message": str(e).split('\n')[0]})
 
 @bp_pessoa.route('/delete/<int:id>', methods=['DELETE'])
 def delete(id):
@@ -95,7 +99,7 @@ def delete(id):
     resultado = cursor.fetchone()
     conn.commit()
     print(resultado[0])
-    return jsonify(resultado[0])
+    return jsonify({"message": resultado[0]})
 
 @bp_pessoa.route('/update/<int:idPessoa>', methods=["PUT"])
 def atualizar(idPessoa):
@@ -117,7 +121,7 @@ def atualizar(idPessoa):
         resultado = cursor.fetchone()
         conn.commit()
         print(resultado[0])
-        return jsonify(resultado[0])
+        return jsonify({"message": resultado[0]})
     except psycopg2.errors as e:
         return e
     finally:
