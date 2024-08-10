@@ -186,7 +186,7 @@ def atualizar(idPessoa):
     # cpf = str(pessoa['cpf'])
 
     try:
-        cursor.execute('select * from atualizar(row(%s, %s, %s, %s, %s, %s, %s, %s))' ,(dados_tratados['nome'], dados_tratados['datanascimento'], dados_tratados['salario'],
+        cursor.execute('select * from atualizar(row(%s, %s, %s, %s, %s, %s, %s, %s))' ,(idPessoa ,dados_tratados['nome'], dados_tratados['datanascimento'], dados_tratados['salario'],
          dados_tratados['observacoes'], dados_tratados['nomemae'], dados_tratados['nomepai'], dados_tratados['cpf']))
         resultado = cursor.fetchone()
         conn.commit()
