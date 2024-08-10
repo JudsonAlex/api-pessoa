@@ -66,6 +66,8 @@ def listarTodos():
             lista_pessoas.append(obj)
     data = jsonify(lista_pessoas)
     print(data)
+    cursor.close()
+    conn.close()
     return data
 
 @bp_pessoa.route('/<int:id>', methods=["GET"])
@@ -90,16 +92,28 @@ def listarUM(id):
     except psycopg2.errors.RaiseException as e:
         print(e)
         return jsonify({"message": str(e).split('\n')[0]})
+    
+    finally:
+        cursor.close()
+        conn.close()
 
 @bp_pessoa.route('/delete/<int:id>', methods=['DELETE'])
 def delete(id):
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute('select * from deletar(%s)', (id,))
-    resultado = cursor.fetchone()
-    conn.commit()
-    print(resultado[0])
-    return jsonify({"message": resultado[0]})
+    try:
+        cursor.execute('select * from deletar(%s)', (id,))
+        resultado = cursor.fetchone()
+        conn.commit()
+        print(resultado[0])
+        return jsonify({"message": resultado[0]})
+    except psycopg2.errors as e:
+        return jsonify({"message": str(e).split('\n')[0]})
+    
+    finally:
+        cursor.close()
+        conn.close()
+
 
 @bp_pessoa.route('/update/<int:idPessoa>', methods=["PUT"])
 def atualizar(idPessoa):
