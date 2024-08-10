@@ -12,6 +12,10 @@ no arquivo `config.py` está as configurações de acesso ao banco de dados. Ser
 * DB_PASS 
 * DB_PORT: o padrão do posgres é `5432`
 
+# arquivos
+no arquivo `scripts.sql` estão os scripts de criação das procedures e consultas.
+no arquivo  `gentil.postman_collection.json` estão as requisiçoes Postman, basta importar-las no programa.
+
 
 # Rotas
 ### GET
@@ -25,9 +29,9 @@ exemplo de body:
 ```
 {
     "nome": "programador",
-    "data": "01/05/2002",
+    "datanascimento": "01/05/2002",
     "salario": 1350,
-    "obs": "",
+    "observacoes": "",
     "nomemae": "Bernadethe",
     "nomepai": "Mário",
     "cpf": "123456"
@@ -45,16 +49,17 @@ exemplo de body:
 ```
 {
     "cpf": "654897",
-    "data": "01/03/1997",
+    "datanascimento": "01/03/1997",
     "idPessoa": 3,
     "nome": "Joaquin",
     "nomemae": null,
     "nomepai": null,
-    "obs": "prof",
+    "observacoes": "prof",
     "salario": "800"
 
 }
 ```
+
 
 
 
