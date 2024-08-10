@@ -81,18 +81,20 @@ def inserirPessoa():
     # cpf = str(pessoa['cpf'])
     # nome, datanascimento, salario, observacoes, nomemae, nomepai, cpf
     
-
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute(f'select * from inserir(row(%s, %s, %s, %s, %s, %s, %s))', (dados_tratados['nome'], dados_tratados['datanascimento'], dados_tratados['salario'],
-         dados_tratados['observacoes'], dados_tratados['nomemae'], dados_tratados['nomepai'], dados_tratados['cpf']))
-    
-    resultado = cursor.fetchone()
-    conn.commit()
-    cursor.close()
-    conn.close()
-    print(resultado[0])
-    return jsonify({"idPessoa":resultado[0]})
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute(f'select * from inserir(row(%s, %s, %s, %s, %s, %s, %s))', (dados_tratados['nome'], dados_tratados['datanascimento'], dados_tratados['salario'],
+            dados_tratados['observacoes'], dados_tratados['nomemae'], dados_tratados['nomepai'], dados_tratados['cpf']))
+        
+        resultado = cursor.fetchone()
+        conn.commit()
+        cursor.close()
+        conn.close()
+        print(resultado[0])
+        return jsonify({"idPessoa":resultado[0]})
+    except psycopg2.errors.UniqueViolation as e:
+        return jsonify({"erro": str(e).split('\n')[0]}), 400
 
 
 @bp_pessoa.route('/', methods=["GET"])
