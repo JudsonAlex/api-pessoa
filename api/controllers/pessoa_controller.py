@@ -107,7 +107,7 @@ def delete(id):
         conn.commit()
         print(resultado[0])
         return jsonify({"message": resultado[0]})
-    except psycopg2.errors as e:
+    except psycopg2.errors.RaiseException as e:
         return jsonify({"message": str(e).split('\n')[0]})
     
     finally:
@@ -136,8 +136,8 @@ def atualizar(idPessoa):
         conn.commit()
         print(resultado[0])
         return jsonify({"message": resultado[0]})
-    except psycopg2.errors as e:
-        return e
+    except psycopg2.Error as e:
+        return jsonify({"message": str(e).split('\n')[0]})
     finally:
         cursor.close()
         conn.close()
