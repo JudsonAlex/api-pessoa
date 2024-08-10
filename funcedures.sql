@@ -80,7 +80,7 @@ begin
 	IF NOT EXISTS (SELECT 1 FROM pessoa WHERE idpessoa = pe.idpessoa) THEN
         RAISE EXCEPTION 'Nenhuma pessoa com id: % encontrada.', pe.idpessoa;
     END IF; 
-	
+
 	update pessoa
 	set
 		nome = pe.nome,
@@ -104,7 +104,6 @@ begin
 	delete from pessoa where idpessoa = id returning idpessoa into linha;
 		
 	if linha is null then
-		return 'NOT FOUND';
 		raise exception 'Erro: Nenhum registro encontrado com o ID %. Operação de exclusão falhou.', id;
 
 	else

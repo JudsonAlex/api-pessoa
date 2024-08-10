@@ -91,7 +91,7 @@ def listarUM(id):
         return jsonify(obj)
     except psycopg2.errors.RaiseException as e:
         print(e)
-        return jsonify({"message": str(e).split('\n')[0]})
+        return jsonify({"message": str(e).split('\n')[0]}), 404
     
     finally:
         cursor.close()
