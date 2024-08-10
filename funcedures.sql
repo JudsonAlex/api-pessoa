@@ -76,6 +76,11 @@ $um$ language plpgsql;
 -- atualizar -> ok
 create or replace function atualizar(pe pessoa_t_id) returns varchar(2) as $up$
 begin
+
+	IF NOT EXISTS (SELECT 1 FROM pessoa WHERE idpessoa = pe.idpessoa) THEN
+        RAISE EXCEPTION 'Nenhuma pessoa com id: % encontrada.', pe.idpessoa;
+    END IF; 
+	
 	update pessoa
 	set
 		nome = pe.nome,
@@ -112,8 +117,8 @@ $del$ language plpgsql;
 
 
 -- execuções -> ok
-select * from listar();
-select * from listarUM(40);
 SELECT inserir(row('chefe', '19/01/96', 5300, 'observer', 'mãe', 'pai', '456789'));
 SELECT atualizar(ROW(1,'judson alexsander', '19/01/96', 2500, 'teste2', 'luzia', 'jorge', '123')::pessoa_t_id);
+select * from listar();
+select * from listarUM(1);
 select deletar(4)
